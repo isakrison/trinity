@@ -31,23 +31,22 @@
         // initial setup
         var gameSize = 3;                                                   			// number of circles on one side of the hex
         var radius = 100;                                                       		// radius of each circle
-        var circleSpacing = Math.round(Math.cos(convertToRadians(60)) * radius);        // one-half the distance between circle radii
-        var gameAreaWidth = (2 * radius) + 2 * circleSpacing * ((gameSize * 2) - 1);  	// width of the square area containing the game board
+        var circleSpacing = 1 * radius;                                                // one-half distance between circle origins, in radians
+        var gameAreaWidth = (2 * radius) + 2 * circleSpacing * ((gameSize * 2) - 2);  	// width of the square area containing the game board
         var gameAreaHeight = gameAreaWidth                                      		// height of the square area containing the game board
 		var canvasPadding = 5															// margin of error for drawing things close to the edge
         var circleLineWidth = 3;                                                      	// circle outline thickness
         var circleLineColor = "gold";                                                 	// circle outline color
-        var startingX = radius;                                                 		// first circle x coord
+        var startingX = radius;                                              			// first circle x coord
         var startingY = gameAreaHeight / 2;                                     		// first circle y coord
-        var xIncrement = circleSpacing;                                         		// one-half horizontal distance between circle radii
-        var yIncrement = Math.round(Math.tan(convertToRadians(60)) * xIncrement);       // vertical distance between rows
+        var xIncrement = circleSpacing;                                             	// absolute horizontal distance between circle origins
+        var yIncrement = Math.round(Math.tan(Math.PI / 3) * xIncrement);                // vertical distance between circle origins
         var myCircles = []; 	                                                		// array of game circles
 
         // here, we declare myGameArea as an object with properties (canvas) and methods (start).
         var myGameArea = {
             canvas	: document.createElement("canvas"),
             start	: function () {
-						alert("cos(60) = " + Math.cos(convertToRadians(60)) + "; gameAreaWidth = " + gameAreaWidth);
 						this.canvas.width = gameAreaWidth + (canvasPadding * 2);
 						this.canvas.height = gameAreaHeight + (canvasPadding * 2);
 						this.context = this.canvas.getContext("2d");                          	// provides a context object for drawing 2d stuff (as opposed to 3d or bitmap)
@@ -162,10 +161,6 @@
             myGameArea.clear();
 			drawCircles();
         }
-		
-		function convertToRadians(degrees) {
-			return (degrees / 360) * (2 * Math.PI);
-		}
 
     </script>
 	
