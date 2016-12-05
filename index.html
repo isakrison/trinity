@@ -29,9 +29,9 @@
 		}
 
         // initial setup
-        var gameSize = 3;                                                   			// number of circles on one side of the hex
+        var gameSize = 5;                                                   			// number of circles on one side of the hex
         var radius = 100;                                                       		// radius of each circle
-        var circleSpacing = 1 * radius;                                                // one-half distance between circle origins, in radians
+        var circleSpacing = .435 * radius;                                                // one-half distance between circle origins, in radians
         var gameAreaWidth = (2 * radius) + 2 * circleSpacing * ((gameSize * 2) - 2);  	// width of the square area containing the game board
         var gameAreaHeight = gameAreaWidth                                      		// height of the square area containing the game board
 		var canvasPadding = 5															// margin of error for drawing things close to the edge
