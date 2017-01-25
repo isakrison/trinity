@@ -3,45 +3,39 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>HTML Game Tutorial</title>
+    <title>HTML Game Tutorial</title>	
 </head>
-<body onload="startGame()">
+<body onload="startGame();">
+
+
+<h3>Namespace hierarchy (unimplemented; WIP):</h3>
+<ul>
+	<li>Trinity
+		<ul>
+			<li>Model
+				<ul>
+					<li>Objects
+						<ul>
+							<li>Circle</li>
+							<li>Cell</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li>Logic
+				<ul>
+					<li>Move</li>
+				</ul>
+			<li>UI
+				<ul>
+					<li>Gameboard</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+
     <script type="text/javascript">
-
-        var Direction = {
-            up		: 1,
-            down	: 2
-        }
-		
-		var CellShape = {
-			center	: 1,
-			petal	: 2,
-			vertex	: 3
-		}
-		
-		var GamePiece = {
-			redSquare		: 1,
-			yellowCircle	: 2,
-			greenTriangle	: 3,
-			blueRectangle	: 4,
-			purpleOval		: 5,
-			blackDiamond	: 6
-		}
-
-        // initial setup
-        var gameSize = 5;                                                   			// number of circles on one side of the hex
-        var radius = 100;                                                       		// radius of each circle
-        var circleSpacing = .435 * radius;                                                // one-half distance between circle origins, in radians
-        var gameAreaWidth = (2 * radius) + 2 * circleSpacing * ((gameSize * 2) - 2);  	// width of the square area containing the game board
-        var gameAreaHeight = gameAreaWidth                                      		// height of the square area containing the game board
-		var canvasPadding = 5															// margin of error for drawing things close to the edge
-        var circleLineWidth = 3;                                                      	// circle outline thickness
-        var circleLineColor = "gold";                                                 	// circle outline color
-        var startingX = radius;                                              			// first circle x coord
-        var startingY = gameAreaHeight / 2;                                     		// first circle y coord
-        var xIncrement = circleSpacing;                                             	// absolute horizontal distance between circle origins
-        var yIncrement = Math.round(Math.tan(Math.PI / 3) * xIncrement);                // vertical distance between circle origins
-        var myCircles = []; 	                                                		// array of game circles
 
         // here, we declare myGameArea as an object with properties (canvas) and methods (start).
         var myGameArea = {
@@ -56,9 +50,9 @@
             clear	: function () {
 						this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             }
-        }		
+        }
 		
-        function drawCircles() {
+        function defineCircles() {
             var x, y;
             var centerRowIndex = gameSize - 1;
             var rowOffset;
@@ -73,24 +67,6 @@
                     myCircles[centerRowIndex + rowOffset] = generateRow(i, x, y);
                 }
             }
-			for (i = 0; i < myCircles.length; i++) {
-				for (j = 0; j < myCircles[i].length; j++) {
-					myCircles[i][j].draw();
-				}
-			}
-        }
-
-        function generateRow(i, x, y){
-			var row = [];
-			this.x = x;
-			this.y = y;
-			
-            for (j = 0; j < gameSize + i; j++) {
-				this.x = transformX(x, j * 2);
-				row[j] = new circle(i, j, this.x, this.y);
-            }
-			
-			return row;
         }
 
         function transformX(x, increments) {
@@ -105,55 +81,53 @@
 			}
         }
 
-        function circle(rowNumber, rowPosition, x, y) {
-			this.rowNumber = rowNumber;		// which row this circle is in (first row is zero)
-			this.rowPosition = rowPosition;	// what position this circle occupies in its row (first position is zero)
-            this.x = x + canvasPadding;		// center x coordinate
-            this.y = y + canvasPadding;		// center y coordinate
-			this.cells = [new cell(0), new cell(1), new cell(2), new cell(3), new cell(4), new cell(5), new cell(6),
-							new cell(7), new cell(8), new cell(9), new cell(10), new cell(11), new cell(12)];
-			this.draw = function() {
-				/*
-					What you want to do here, instead, is:
-						~ find the coordinates of six points on the diameter of the circle at odd clock numbers
-							- track all vertices as their own thing; circles have pointers to them
-						~ together with the center point, these form six equilateral triangles
-						~ draw three arcs inside each triangle such that they overlap - arc or quadratic; see what works best
-						~ edges are automatically handled with this method
-				*/
-				context = myGameArea.context;
-				context.lineWidth = circleLineWidth;
-				context.strokeStyle = circleLineColor;
-				context.beginPath();
-				context.arc(this.x, this.y, radius, 0, 2 * Math.PI, false); // x, y, radius, start angle, end angle, boolean counterclockwise
-				context.stroke();
-			}
+        function generateRow(i, x, y){
+			var row = [];
+			this.x = x;
+			this.y = y;
+			
+            for (j = 0; j < gameSize + i; j++) {
+				this.x = transformX(x, j * 2);
+				row[j] = new Circle(i, j, this.x, this.y);
+            }
+			
+			return row;
         }
 		
-		function cell(clockPosition) {
-			this.clockPosition = clockPosition;
-			this.shape;
-			this.contents;	// game tile currently occupying this cell
-			
-			switch(clockPosition) {
-				case 0:
-				case 4:
-				case 8:
-					this.shape = CellShape.center;
-					break;
-				case 2:
-				case 6:
-				case 10:
-					this.shape = CellShape.vertex;
-					break;
-				default:
-					this.shape = CellShape.petal;
-					break;
+		function drawCircles() {
+			for (i = 0; i < myCircles.length; i++) {
+				for (j = 0; j < myCircles[i].length; j++) {
+					myCircles[i][j].draw();
+				}
 			}
+		}
+		
+		function defineCells() {
+			
+			/*
+				for each circle:
+					for each of 6 cell slots:
+						check to see if this cell has already been generated on a different circle, and assign if so
+							each circle shares one cell with its 2nd-neighbor at each of 6 odd-numbered clock points
+						if not, generate the cell			
+			*/
+			
+			for (i = 1; i < myCircles.length; i++) {
+				for (j = 0; j < myCircles[i].length; j++) {
+					// if cell doesn't already exist:
+					
+				}
+			}
+		}
+		
+		function drawCells() {
+			// draw cells
 		}
 
         function startGame() {
             myGameArea.start();
+			defineCircles();
+			defineCells();
 			drawCircles();
         }
 
@@ -163,6 +137,7 @@
         }
 
     </script>
+	<script src = "Circle.js" />
 	
 	<div id="messages" style="width:600px;">
 	</div>
