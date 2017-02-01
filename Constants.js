@@ -24,14 +24,14 @@ var GamePiece = {
 // initial setup
 var gameSize = 5;                                                   			// number of circles on one side of the hex
 var radius = 100;                                                       		// radius of each circle
-var circleSpacing = .435 * radius;                                              // one-half distance between circle origins, in radians
+var circleSpacing = .435 * radius;                                              // one-half distance between circle origins in the same row
 var gameAreaWidth = (2 * radius) + 2 * circleSpacing * ((gameSize * 2) - 2);  	// width of the square area containing the game board
 var gameAreaHeight = gameAreaWidth                                      		// height of the square area containing the game board
 var canvasPadding = 5															// margin of error for drawing things close to the edge
 var circleLineWidth = 3;                                                      	// circle outline thickness
 var circleLineColor = "gold";                                                 	// circle outline color
-var startingX = radius;                                              			// first circle x coord
-var startingY = gameAreaHeight / 2;                                     		// first circle y coord
+var startingX = radius;                                              			// first circle x coord, where [0,0] is upper left
+var startingY = gameAreaHeight / 2;                                     		// first circle y coord, where [0,0] is upper left
 var xIncrement = circleSpacing;                                             	// absolute horizontal distance between circle origins
 var yIncrement = Math.round(Math.tan(Math.PI / 3) * xIncrement);                // vertical distance between circle origins
 var myCircles = []; 	                                                		// array of game circles
