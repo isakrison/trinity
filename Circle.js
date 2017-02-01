@@ -8,16 +8,25 @@ function Circle(rowNumber, rowPosition, coordinates) {
 }
 
 Circle.prototype.loadCells = function() {
+	var myNeighbor, myCell
+	
 	for (i = 0; i < 6; i++) {
 		// check if cell exists
+		myNeighbor = this.getNeighbor(ClockPosition[i], 2);		
+		if (myNeighbor != null) {
+			myCell = myNeighbor.getCell(ClockPosition[i > 2 ? i - 3 : i]);
+		}
+		if (myCell != null) {
+			this.cells[i] = myCell;
+		}
 		
 		// if not, define one
 	}
 }
 
 Circle.prototype.getNeighbor = function(clockPosition, distance) {
-	neighborRow = getNeighborRow(clockPosition);
-	neighborPosition = getNeighborPosition(clockPosition, neighborRow);
+	var neighborRow = getNeighborRow(clockPosition);
+	var neighborPosition = getNeighborPosition(clockPosition, neighborRow);
 	
 	if (neighborRow == null || neighborPosition == null) {
 		return null;
@@ -33,18 +42,18 @@ Circle.prototype.getNeighborRow = function(clockPosition) {
 		// neighbor in row above
 		case ClockPosition.clock_1:
 		case ClockPosition.clock_11:
-			if (rowNumber - 1 >= 0) {
-				return rowNumber - 1;
+			if (this.rowNumber - 1 >= 0) {
+				return this.rowNumber - 1;
 			}
 		// neighbor in same row
 		case ClockPosition.clock_3:
 		case ClockPosition.clock_9:
-			return rowNumber;
+			return this.rowNumber;
 		// neighbor in row below
 		case ClockPosition.clock_5:
 		case ClockPosition.clock_7:
-			if (rowNumber + 1 < gameSize){
-				return rowNumber + 1;
+			if (this.rowNumber + 1 < gameSize){
+				return this.rowNumber + 1;
 			}
 		default:
 			return null; // no such row exists

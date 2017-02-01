@@ -76,8 +76,7 @@
 			
 			for (i = 1; i < myCircles.length; i++) {
 				for (j = 0; j < myCircles[i].length; j++) {
-					// if cell doesn't already exist:
-					
+					myCircles[i][j].defineCells();					
 				}
 			}
 		}
