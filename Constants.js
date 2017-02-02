@@ -4,11 +4,11 @@ var Direction = {
 }
 
 var ClockPosition = {
-	clock_1	: 0,
-	clock_3	: 1,
-	clock_5	: 2,
-	clock_7	: 3,
-	clock_9	: 4,
+	clock_1		: 0,
+	clock_3		: 1,
+	clock_5		: 2,
+	clock_7		: 3,
+	clock_9		: 4,
 	clock_11	: 5
 }
 
