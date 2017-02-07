@@ -4,14 +4,22 @@ function Circle(rowNumber, rowPosition, coordinates) {
 	this.coordinates = coordinates;
 	this.coordinates.x += canvasPadding;	// center x coordinate
 	this.coordinates.y += canvasPadding;	// center y coordinate
-	var cells = [];
+	this.cells = [];
 }
 
-Circle.prototype.getCell(clockPosition){
-	if(typeof cells[clockPosition] === "undefined") {
+Circle.prototype.x = function() {
+	return this.coordinates.x;
+}
+
+Circle.prototype.y = function() {
+	return this.coordinates.y;
+}
+
+Circle.prototype.getCell = function(clockPosition){
+	if(typeof this.cells[clockPosition] === "undefined") {
 		return null;
 	}
-	return cells[clockPosition];
+	return this.cells[clockPosition];
 }
 		
 Circle.prototype.draw = function() {

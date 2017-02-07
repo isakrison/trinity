@@ -82,22 +82,31 @@ function defineCells() {
 
 function assignCells(circle) {
 	var neighbor, sharedCell;
+	var value;
 	
-	for (i = 0; i < 6; i++) {
+	for (var key in ClockPosition) {
+		value = ClockPosition[key];
 		// check if cell exists
-		neighbor = getNeighboringCircle(ClockPosition[i], 2);		
-		if (myNeighbor != null) {
-			sharedCell = neighbor.getCell(ClockPosition[i > 2 ? i - 3 : i]);
+		neighbor = getNeighboringCircle(circle, value, 2);
+		if (neighbor != null) {
+			sharedCell = neighbor.getCell(getOppositeClockPosition(ClockPosition[key]));
 		}
 		if (sharedCell != null) {
-			sharedCell.circles[clockPosition[i]] = circle;
-			circle.cells[i] = sharedCell;
+			sharedCell.circles[value] = circle;
+			circle.cells[value] = sharedCell;
 			continue;
 		}
 		// if not, define one
-		circle.cells[i] = new Cell(circle, ClockPositions[i]);
-		circle.cells[i].circles[clockposition[i]] = circle;
+		alert("typeof circle = " + typeof circle + "\ntypeof circle.cells = " + typeof circle.cells + "\ntypeof circle.cells[" + value + "] = " + typeof circle.cells[value]);
+		circle.cells[value] = new Cell(circle, value);
+		alert("typeof circle = " + typeof circle + "\ntypeof circle.cells = " + typeof circle.cells + "\ntypeof circle.cells[" + value + "] = " + typeof circle.cells[value]
+				+ "\ntypeof circle.cells[" + value + "].circles = " + typeof circle.cells[value].circles[value]);
+		circle.cells[value].circles[value] = circle;
 	}
+}
+
+function getOppositeClockPosition(clockPosition) {
+	return clockPosition > 2 ? clockPosition - 3 : clockPosition;
 }
 
 function getNeighboringCircle(circle, clockPosition, distance){
@@ -107,13 +116,14 @@ function getNeighboringCircle(circle, clockPosition, distance){
 	if (neighborRow == null || neighborPosition == null) {
 		return null;
 	} else if (distance > 1) {
-		return myCircles[neighborRow][neighborPosition].getNeighbor(clockPosition, distance - 1);
+		return getNeighboringCircle(myCircles[neighborRow][neighborPosition], clockPosition, distance - 1);
 	} else {
 		return myCircles[neighborRow][neighborPosition];
 	}
 }
 
 function getNeighborRow(circle, clockPosition) {
+	alert("in getNeighborRow\ncircle.rowNumber = " + circle.rowNumber + "\nclockPosition = " + clockPosition);
 	switch(clockPosition) {
 		// neighbor in row above
 		case ClockPosition.clock_1:
@@ -137,6 +147,7 @@ function getNeighborRow(circle, clockPosition) {
 }
 
 function getNeighborPosition(circle, clockPosition, neighborRow) {
+	alert("neighborRow = " + neighborRow);
 	if (neighborRow < circle.rowNumber) {
 		// neighbor row is above this row, and smaller (i.e., in upper half of board)
 		if (myCircles[neighborRow].length < myCircles[circle.rowNumber].length){
@@ -217,7 +228,7 @@ function drawCells() {
 function startGame() {
 	myGameArea.start();
 	defineCircles();
-	//defineCells();
+	defineCells();
 	drawCircles();
 }
 
