@@ -9,18 +9,18 @@ function Circle(rowNumber, rowPosition, coordinates) {
 
 Circle.prototype.x = function() {
 	return this.coordinates.x;
-}
+};
 
 Circle.prototype.y = function() {
 	return this.coordinates.y;
-}
+};
 
 Circle.prototype.getCell = function(clockPosition){
 	if(typeof this.cells[clockPosition] === "undefined") {
 		return null;
 	}
 	return this.cells[clockPosition];
-}
+};
 		
 Circle.prototype.draw = function() {
 	//alert("got here: Circle.draw");
@@ -32,4 +32,4 @@ Circle.prototype.draw = function() {
 	alert("x = " + this.coordinates.x + "\ny = " + this.coordinates.y);
 	context.stroke();
 	//alert("got here: end of Circle.draw");
-}
+};

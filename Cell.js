@@ -2,6 +2,7 @@ function Cell(Circle, ClockPosition) {
 	this.coordinates = this.findCoordinates(Circle, ClockPosition);
 	this.currentContents;	// game tile currently occupying this cell
 	this.circles = [];		// circle at index [i] is the circle *that has this cell* at ClockPosition i
+	this.drawn = false;
 }
 
 Cell.prototype.findCoordinates = function(circle, clockPosition) {
@@ -36,15 +37,15 @@ Cell.prototype.findCoordinates = function(circle, clockPosition) {
 	y = Math.round(Math.sin(angle) * circleSpacing);
 	
 	return new Coordinates(circle.x + x, circle.y + y);
-}
+};
 
 Cell.prototype.x = function() {
 	return this.coordinates.x;
-}
+};
 
 Cell.prototype.y = function() {
 	return this.coordinates.y;
-}
+};
 
 Cell.prototype.draw = function() {
 	context = myGameArea.context;
@@ -53,4 +54,5 @@ Cell.prototype.draw = function() {
 	context.beginPath();
 	context.arc(this.coordinates.x, this.coordinates.y, (radius - centerSpacing) * 2, 0, 2 * Math.PI, false); // x, y, radius, start angle, end angle, boolean counterclockwise
 	context.stroke();
-}
+	this.drawn = true;
+};

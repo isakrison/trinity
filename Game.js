@@ -14,6 +14,8 @@ var myGameArea = {
 }
 
 function defineCircles() {
+	generateHexGrid(gameSize * 2 - 1, myCircles, Circle)
+	/*
 	var x, y;
 	var centerRowIndex = gameSize - 1;
 	var rowOffset, rowNumber;
@@ -30,28 +32,59 @@ function defineCircles() {
 			myCircles[rowNumber] = generateRow(rowNumber, i, x, y);
 		}
 	}
+	
+	for (a = 0; a < myCircles.length; a++){
+		printMessage("");
+		printMessage("myCircles[" + a + "].length = " + myCircles[a].length, "darkorange");
+		for (b = 0; b < myCircles[a].length; b++) {
+			printMessage("myCircles[" + a + ", " + b + "] = " + typeof myCircles[a][b]);
+		}
+	}
+	*/
 }
 
-function transformX(x, increments) {
-	return x + (xIncrement * increments);
-}
-
-function transformY(y, increments, direction) {
-	if (direction == Direction.up) {
-		return y - (yIncrement * increments);
-	} else {
-		return y + (yIncrement * increments);
+function generateHexGrid(numberOfRows, gridArray, func_constructor) {
+	if(numberOfRows % 2 != 1) {
+		// error
+		return false;
+	}
+	
+	var rowNumber, rowLength;
+	rowNumber = 0;
+	rowLength = Math.floor(numberOfRows / 2);
+	
+	// top half of grid - row length increasing
+	for(i = 0; i < Math.ceiling(numberOfRows / 2); i++) {
+		rowLength++; 
+		var row = [];
+		for(j = 0; j < rowLength; j++) {
+			row[j] = new func_constructor(i, j);
+		}
+		gridArray[i] = row;
+		rowNumber++;
+	}
+	// bottom half of grid - row length decreasing
+	for(i = rowNumber++; i < numberOfRows; i++) {
+		rowLength--;
+		var row = [];
+		for(j = 0; j < rowLength; j++) {
+			row[j] = new func_constructor(i, j);
+		}
+		gridArray[i] = row;
 	}
 }
 
-function generateRow(rowNumber, rowSize, x, y){
+function generateRow(rowNumber, rowSizeModifier, x, y){
+	// move x, y logic to circle constructor, making this a pure logic structure builder?
 	var row = [];
 	this.x;
 	
-	for (j = 0; j < gameSize + rowSize; j++) {
+	for (j = 0; j < gameSize + rowSizeModifier; j++) {
 		this.x = transformX(x, j * 2);
 		row[j] = new Circle(rowNumber, j, new Coordinates(this.x, y));
 	}
+	
+	printMessage("row.length = " + row.length);
 	
 	return row;
 }
@@ -65,44 +98,63 @@ function drawCircles() {
 }
 
 function defineCells() {
+	// define a separate grid of cells
+		// there are 2(gameSize) + 1 rows of cells
+		// the middle row of cells is 2(gameSize) + 1 cells across
+		// the top and bottom rows of cells are gameSize + 1 cells across
 	
+	generateHexGrid(gameSize * 2 + 1, myCells, Cell)
+		
 	/*
-		for each circle:
-			for each of 6 cell slots:
-				check to see if this cell has already been generated on a different circle, and assign if so
-					each circle shares one cell with its 2nd-neighbor at each of 6 odd-numbered clock points
-				if not, generate the cell			
-	*/	
-	for (i = 1; i < myCircles.length; i++) {
+	for (i = 0; i < myCircles.length; i++) {
 		for (j = 0; j < myCircles[i].length; j++) {
 			assignCells(myCircles[i][j]);					
 		}
 	}
+	*/
 }
 
 function assignCells(circle) {
+	// here we already have a grid of cells
+	// we just need to assign circles to cells and vice versa
+	// two functions maybe, for clarity
+	
+	
+	/*
 	var neighbor, sharedCell;
-	var value;
+	var clockPosition;
+	printMessage("");
+	printMessage("in assignCell: myCircles[" + circle.rowNumber + ", " + circle.rowPosition + "]");
 	
 	for (var key in ClockPosition) {
-		value = ClockPosition[key];
+		printSpaces(4);
+		printMessage("clockPosition " + ClockPosition[key]);
+		
+		clockPosition = ClockPosition[key];
 		// check if cell exists
-		neighbor = getNeighboringCircle(circle, value, 2);
+		neighbor = getNeighboringCircle(circle, clockPosition, 2);
 		if (neighbor != null) {
+			printSpaces(8);
+			printMessage("neighbor = myCircles[" + neighbor.rowNumber + ", " + neighbor.rowPosition + "]");
 			sharedCell = neighbor.getCell(getOppositeClockPosition(ClockPosition[key]));
+		} else {
+			printSpaces(8);
+			printMessage("neighbor is null");
 		}
 		if (sharedCell != null) {
-			sharedCell.circles[value] = circle;
-			circle.cells[value] = sharedCell;
+			printSpaces(8);
+			printMessage("cell = myCircles[" + neighbor.rowNumber + ", " + neighbor.rowPosition + "].cells[" + getOppositeClockPosition(ClockPosition[key]) + "]");
+			sharedCell.circles[clockPosition] = circle;
+			circle.cells[clockPosition] = sharedCell;
 			continue;
 		}
 		// if not, define one
-		alert("typeof circle = " + typeof circle + "\ntypeof circle.cells = " + typeof circle.cells + "\ntypeof circle.cells[" + value + "] = " + typeof circle.cells[value]);
-		circle.cells[value] = new Cell(circle, value);
-		alert("typeof circle = " + typeof circle + "\ntypeof circle.cells = " + typeof circle.cells + "\ntypeof circle.cells[" + value + "] = " + typeof circle.cells[value]
-				+ "\ntypeof circle.cells[" + value + "].circles = " + typeof circle.cells[value].circles[value]);
-		circle.cells[value].circles[value] = circle;
+		printSpaces(8);
+		printMessage("defining new Cell");
+		circle.cells[clockPosition] = new Cell(circle, clockPosition);
+		circle.cells[clockPosition].circles[clockPosition] = circle;
 	}
+	*/
 }
 
 function getOppositeClockPosition(clockPosition) {
@@ -110,10 +162,17 @@ function getOppositeClockPosition(clockPosition) {
 }
 
 function getNeighboringCircle(circle, clockPosition, distance){
-	var neighborRow = getNeighborRow(circle, clockPosition);
-	var neighborPosition = getNeighborPosition(circle, clockPosition, neighborRow);
+	printSpaces(12);
+	printMessage("in getNeighboringCircle(myCircles[" + circle.rowNumber + ", " + circle.rowPosition + "], clockPosition " + clockPosition + ", distance " + distance + ")");
 	
-	if (neighborRow == null || neighborPosition == null) {
+	var neighborRow, neighborPosition
+	
+	neighborRow = getNeighborRow(circle, clockPosition);
+	if(neighborRow == null) {
+		return null;
+	}	
+	neighborPosition = getNeighborPosition(circle, clockPosition, neighborRow);	
+	if (neighborPosition == null) {
 		return null;
 	} else if (distance > 1) {
 		return getNeighboringCircle(myCircles[neighborRow][neighborPosition], clockPosition, distance - 1);
@@ -123,34 +182,50 @@ function getNeighboringCircle(circle, clockPosition, distance){
 }
 
 function getNeighborRow(circle, clockPosition) {
-	alert("in getNeighborRow\ncircle.rowNumber = " + circle.rowNumber + "\nclockPosition = " + clockPosition);
+	printSpaces(16);
+	printMessage("in getNeighborRow(myCircles[" + circle.rowNumber + ", " + circle.rowPosition + "], clockPosition " + clockPosition + ")");
+	
 	switch(clockPosition) {
 		// neighbor in row above
 		case ClockPosition.clock_1:
 		case ClockPosition.clock_11:
 			if (circle.rowNumber - 1 >= 0) {
+				printSpaces(20);
+				printMessage("neighborRow = " + circle.rowNumber - 1);
 				return circle.rowNumber - 1;
 			}
+			break;
 		// neighbor in same row
 		case ClockPosition.clock_3:
-		case ClockPosition.clock_9:
+		case ClockPosition.clock_9: {
+			printSpaces(20);
+			printMessage("neighborRow is same row");
 			return circle.rowNumber;
+		}
+		break;
 		// neighbor in row below
 		case ClockPosition.clock_5:
 		case ClockPosition.clock_7:
 			if (circle.rowNumber + 1 < gameSize){
+				printSpaces(20);
+				printMessage("neighborRow = " + circle.rowNumber + 1);
 				return circle.rowNumber + 1;
 			}
-		default:
-			return null; // no such row exists
 	}
+
+	printSpaces(20);
+	printMessage("neighborRow is null");
+	return null; // no such row exists
 }
 
 function getNeighborPosition(circle, clockPosition, neighborRow) {
-	alert("neighborRow = " + neighborRow);
+	printSpaces(16);
+	printMessage("in getNeighborPosition(myCircles[" + circle.rowNumber + ", " + circle.rowPosition + "], clockPosition " + clockPosition + ", neighborRow " + neighborRow + ")");
 	if (neighborRow < circle.rowNumber) {
 		// neighbor row is above this row, and smaller (i.e., in upper half of board)
 		if (myCircles[neighborRow].length < myCircles[circle.rowNumber].length){
+			printSpaces(20);
+			printMessage("neighbor row is above this row, and smaller");
 			switch(clockPosition) {
 				case ClockPosition.clock_1:
 					// same "column" - row position same as this
@@ -167,6 +242,8 @@ function getNeighborPosition(circle, clockPosition, neighborRow) {
 			}
 		// neighbor row is above this row, and larger (i.e., in lower half of board) - positions here will always exist
 		} else {
+			printSpaces(20);
+			printMessage("neighbor row is above this row, and larger");
 			switch(clockPosition) {
 				case ClockPosition.clock_1:
 					// next "column"
@@ -179,6 +256,8 @@ function getNeighborPosition(circle, clockPosition, neighborRow) {
 	} else if (neighborRow > circle.rowNumber) {
 		// neighbor row is below this row, and smaller (i.e., in lower half of board)
 		if (myCircles[neighborRow].length < myCircles[circle.rowNumber].length) {
+			printSpaces(20);
+			printMessage("neighbor row is below this row, and smaller");
 			switch(clockPosition) {
 				case ClockPosition.clock_5:
 					// same "column" - row position same as this
@@ -195,6 +274,8 @@ function getNeighborPosition(circle, clockPosition, neighborRow) {
 			}
 		// neighbor row is below this row, and larger (i.e., in upper half of board) - positions here will always exist
 		} else {
+			printSpaces(20);
+			printMessage("neighbor row is below this row, and larger");
 			switch(clockPosition) {
 				case ClockPosition.clock_5:
 					// next "column"
@@ -206,14 +287,16 @@ function getNeighborPosition(circle, clockPosition, neighborRow) {
 		}
 	} else {
 		// neighbor is in same row
+		printSpaces(20);
+		printMessage("neighbor is in same row");
 		switch(clockPosition) {
 			case ClockPosition.clock_3:
-				if (circle.rowPosition - 1 >= 0){
-					return circle.rowPosition - 1;
-				}
-			case ClockPosition.clock_9:
 				if (circle.rowPosition + 1 < myCircles[circle.rowNumber].length) {
 					return circle.rowPosition + 1;
+				}
+			case ClockPosition.clock_9:
+				if (circle.rowPosition - 1 >= 0){
+					return circle.rowPosition - 1;
 				}
 			default:
 				return null; // no such row position exists
