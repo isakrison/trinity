@@ -11,15 +11,15 @@ function Coordinates(x, y) {
 	FUNCTIONS
 *****************/
 
-function transformX(x, increments) {
-	return x + (xIncrement * increments);
+function transformX(x, increment, numberOfIncrements) {
+	return Math.round(x + (increment * numberOfIncrements));
 }
 
-function transformY(y, increments, direction) {
+function transformY(y, increment, numberOfIncrements, direction) {
 	if (direction == Direction.up) {
-		return y - (yIncrement * increments);
+		return Math.round(y - (increment * numberOfIncrements));
 	} else {
-		return y + (yIncrement * increments);
+		return Math.round(y + (increment * numberOfIncrements));
 	}
 }
 
