@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <title>HTML Game Tutorial</title>
-	<script src="Constants.js"></script>
 	<script src="Common.js"></script>
+	<script src="Constants.js"></script>
 	<script src="Circle.js"></script>
 	<script src="Cell.js"></script>
 	<script src="Game.js"></script>
@@ -13,32 +13,38 @@
 <body onload="startGame();">
 
 
-<h3>Namespace hierarchy (unimplemented; WIP):</h3>
-<ul>
-	<li>Trinity
-		<ul>
-			<li>Model
-				<ul>
-					<li>Objects
-						<ul>
-							<li>Circle</li>
-							<li>Cell</li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li>Logic
-				<ul>
-					<li>Move</li>
-				</ul>
-			<li>UI
-				<ul>
-					<li>Gameboard</li>
-				</ul>
-			</li>
-		</ul>
-	</li>
-</ul>
+	<h3>Namespace hierarchy (unimplemented; WIP):</h3>
+	<ul>
+		<li>Trinity
+			<ul>
+				<li>Model
+					<ul>
+						<li>Objects
+							<ul>
+								<li>Circle</li>
+								<li>Cell</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>Logic
+					<ul>
+						<li>Move</li>
+					</ul>
+				<li>UI
+					<ul>
+						<li>Gameboard</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+
+	<h3>Misc. notes:</h3>
+	<ul>
+		<li>Tap to select (and highlight) circle; tap and drag to rotate?</li>
+	</ul>
+	<hr/>
 	<h3>Console:</h3>
 	<div id="messages" style="width:1000px;font-family:monospace;">
 	</div>

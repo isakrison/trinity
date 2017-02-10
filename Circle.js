@@ -38,6 +38,6 @@ Circle.prototype.draw = function() {
 	context.lineWidth = circleLineWidth;
 	context.strokeStyle = circleLineColor;
 	context.beginPath();
-	context.arc(this.x(), this.y(), radius, 0, 2 * Math.PI, false); // x, y, radius, start angle, end angle, boolean counterclockwise
+	context.arc(this.x(), this.y(), circleRadius, 0, convertToRadians(360), false); // x, y, circleRadius, start angle, end angle, boolean counterclockwise
 	context.stroke();
 };

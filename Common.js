@@ -24,11 +24,11 @@ function transformY(y, increment, numberOfIncrements, direction) {
 }
 
 function convertToRadians(degrees) {
-	return (degrees / 360) * 2 * Math.Pi;
+	return (degrees / 360) * 2 * Math.PI;
 }
 
 function convertToDegrees(radians) {
-	return radians / (2 * Math.Pi) * 360;
+	return radians / (2 * Math.PI) * 360;
 }
 
 /**************************

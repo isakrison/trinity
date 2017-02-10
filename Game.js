@@ -13,6 +13,9 @@ var myGameArea = {
 	}
 }
 
+var myCircles = [];
+var myCells = [];
+
 function generateInitialBoard() {	
 	defineCircles();
 	defineCells();
