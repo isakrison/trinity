@@ -22,11 +22,17 @@ var Direction = {
 
 var ClockFace = {
 	clock_1		: 0,
-	clock_3		: 1,
-	clock_5		: 2,
-	clock_7		: 3,
-	clock_9		: 4,
-	clock_11	: 5
+	clock_2		: 1,
+	clock_3		: 2,
+	clock_4		: 3,
+	clock_5		: 4,
+	clock_6		: 5,
+	clock_7		: 6,
+	clock_8		: 7,
+	clock_9		: 8,
+	clock_10	: 9,
+	clock_11	: 10,
+	clock_12	: 11
 }
 
 var GamePiece = {
