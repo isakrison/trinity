@@ -7,8 +7,8 @@ var gameSize = 4;               // number of circles on one side of the hex
 var circleRadius = 100;			// radius of each circle
 var circleSpacing = .435		// one-half distance between circle origins in the same row, in radians
 var circleLineWidth = 3;		// circle outline thickness
-var circleLineColor = "gold";	// circle outline color
-var cellRadius = 5;				// radius of each cell
+var circleLineColor = "lightgray";	// circle outline color
+var cellRadius = 10;				// radius of each cell
 var cellLineWidth = 2;			// cell outline thickness
 var cellLineColor = "gray";		// cell outline color
 
@@ -41,10 +41,12 @@ var GamePiece = {
 /************************
 	Derived constants
 ************************/
-var circleXIncrement = Math.round(circleSpacing * circleRadius * 100) / 100;		// horizontal distance between circle origins in neighboring rows, or one-half distance between circle origins in the same row
-var circleYIncrement = Math.round(													// vertical distance between circle origins in neighboring rows (2 decimal precision)
+var circleXIncrement = Math.round(circleSpacing * circleRadius * 100) / 100;		// horizontal distance between circle origins in neighboring rows
+var circleYIncrement = Math.round(													// vertical distance between circle origins in neighboring rows
 	Math.tan(convertToRadians(60)) * circleXIncrement * 100) / 100;
 var gameAreaWidth = 2 * circleRadius + 2 * circleXIncrement * (gameSize * 2 - 2);	// width of the square area containing the game board
 var gameAreaHeight = gameAreaWidth                                      			// height of the square area containing the game board
 var leftmostCircleY = gameAreaHeight / 2;                                     		// first circle of middle row y coord, where [0,0] is upper left
 var leftmostCircleX = circleRadius;                                              	// first circle of middle row x coord, where [0,0] is upper left
+
+cellRadius = circleRadius - circleXIncrement * 2; // overwriting value above - not sure which approach I'll end up going with

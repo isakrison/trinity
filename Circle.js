@@ -34,10 +34,24 @@ Circle.prototype.getCell = function(clockPosition){
 };
 		
 Circle.prototype.draw = function() {
+	// trying out a different radius value:
+	/*
+		Playing with this gives very different effects:
+			~ circleRadius give a straightforward hex grid
+			~ circleRadius - cellRadius gives the same, but with cleaner lines that work very well visually
+			~ circleRadius - cellRadius / 2 gives something closer to the original petal/vertex context
+				- visually, this version is actually doable - it's just that the cells would move in straight lines rather than along a smooth curve
+				- there are only petals and vertices, and each cell is one or the other - still, you could do interesting things with the rules using
+				  just those
+				- for visual clarity, probably you'd make the "star" that forms around each cell solid - or possibly eliminate it altogether, though
+				  this would make the board less curvy and more geometric. Also, the math would be interesting
+	*/
+	var drawnRadius = circleRadius - cellRadius / 2;
+	
 	context = myGameArea.context;
 	context.lineWidth = circleLineWidth;
 	context.strokeStyle = circleLineColor;
 	context.beginPath();
-	context.arc(this.x(), this.y(), circleRadius, 0, convertToRadians(360), false); // x, y, circleRadius, start angle, end angle, boolean counterclockwise
+	context.arc(this.x(), this.y(), drawnRadius, 0, convertToRadians(360), false); // x, y, circleRadius, start angle, end angle, boolean counterclockwise
 	context.stroke();
 };

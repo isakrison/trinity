@@ -21,7 +21,7 @@ function generateInitialBoard() {
 	defineCells();
 	defineCircleCellRelations();
 	drawCircles();
-	//drawCells();
+	drawCells();
 }
 
 function defineCircles() {
