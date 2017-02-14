@@ -11,12 +11,12 @@ Cell.prototype.findCoordinates = function(rowNumber, rowPosition) {
 	var centerRowIndex, rowOffset;
 	var x, y;
 	
-	centerRowIndex = gameSize;
+	centerRowIndex = gameSize * 2;
 	rowOffset = Math.abs(centerRowIndex - rowNumber);
 	
-	x = transformX(leftmostCircleX, circleXIncrement, rowPosition * 2 + rowOffset - 2);
-	y = rowNumber <= centerRowIndex ? transformY(leftmostCircleY, circleYIncrement, rowOffset, Direction.up)
-		: transformY(leftmostCircleY, circleYIncrement, rowOffset, Direction.down);
+	x = transformX(leftmostCircleX, circleXIncrement, rowPosition + rowOffset / 2 - 2);
+	y = rowNumber <= centerRowIndex ? transformY(leftmostCircleY, circleYIncrement / 2, rowOffset, Direction.up)
+		: transformY(leftmostCircleY, circleYIncrement / 2, rowOffset, Direction.down);
 		
 	printMessage("myCells[" + rowNumber + ", " + rowPosition + "]: x = " + x + "; y = " + y);
 	

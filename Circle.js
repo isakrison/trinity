@@ -46,7 +46,7 @@ Circle.prototype.draw = function() {
 				- for visual clarity, probably you'd make the "star" that forms around each cell solid - or possibly eliminate it altogether, though
 				  this would make the board less curvy and more geometric. Also, the math would be interesting
 	*/
-	var drawnRadius = circleRadius - cellRadius / 2;
+	var drawnRadius = circleRadius - cellRadius * .75;
 	
 	context = myGameArea.context;
 	context.lineWidth = circleLineWidth;

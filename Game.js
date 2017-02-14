@@ -19,7 +19,7 @@ var myCells = [];
 function generateInitialBoard() {	
 	defineCircles();
 	defineCells();
-	defineCircleCellRelations();
+	//defineCircleCellRelations();
 	drawCircles();
 	drawCells();
 }
@@ -29,7 +29,7 @@ function defineCircles() {
 }
 
 function defineCells() {	
-	generateHexGrid(gameSize * 2 + 1, myCells, Cell)
+	generateHexGrid(gameSize * 4 + 1, myCells, Cell)
 }
 
 function generateHexGrid(numberOfRows, gridArray, func_constructor) {
