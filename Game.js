@@ -19,7 +19,7 @@ var myCells = [];
 function generateInitialBoard() {	
 	defineCircles();
 	defineCells();
-	//defineCircleCellRelations();
+	defineCircleCellRelations();
 	drawCircles();
 	drawCells();
 }
@@ -65,76 +65,159 @@ function generateHexGrid(numberOfRows, gridArray, func_constructor) {
 }
 
 function defineCircleCellRelations() {
-	var centerCellRowIndex = gameSize;
+	var centerCellRowIndex = gameSize * 2;
 	
 	for(i = 0; i < myCells.length; i++) {
-		for(j = 0; j < myCells[i].length; j++) {
-			// the cells in this row are 11s and 1s to a row of circles
-			if(i < myCells.length - 2) {
-				// cell is in top half of grid
-				if(i < centerCellRowIndex) {
-					if(j < myCells[i].length - 1) {
-						// cell is 11 to myCircles[i, j]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + i + ", " + j + "], clock 11");
-						assignCell(myCells[i][j], myCircles[i][j], ClockFace.clock_11);
+		if(i % 2 == 0) {
+		// we're on an even-indexed row
+			for(j = 0; j < myCells[i].length; j++) {
+				if(j % 2 == 0){
+				// even-indexed cells in even-indexed rows occupy odd-numbered clock positions (vortices)
+					if(i < myCells.length - 4) {
+					// cells in this row are 11s and 1s to a row of circles
+						if(i < centerCellRowIndex) {
+						// cell is in top half of grid
+							if(j < myCells[i].length - 2) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2) + ", " + (j / 2) + "], clock 11");
+								assignCell(myCells[i][j], myCircles[i / 2][j / 2], ClockFace.clock_11);
+							}
+							if(j > 0) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2) + ", " + (j / 2 - 1) + "], clock 1");
+								assignCell(myCells[i][j], myCircles[i / 2][j / 2 - 1], ClockFace.clock_1);
+							}
+						} else {
+						// cell is in bottom half of grid or center row
+							if(j > 0 && j < myCells[i].length - 4) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2) + ", " + (j / 2 - 1) + "], clock 11");
+								assignCell(myCells[i][j], myCircles[i / 2][j / 2 - 1], ClockFace.clock_11);
+							}
+							if(j > 2 && j < myCells[i].length - 2) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2) + ", " + (j / 2 - 2) + "], clock 1");
+								assignCell(myCells[i][j], myCircles[i / 2][j / 2 - 2], ClockFace.clock_1);
+							}					
+						}
 					}
-					if(j > 0) {
-						// cell is 1 to myCircles[i, j-1]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + i + ", " + (j - 1) + "], clock 1");
-						assignCell(myCells[i][j], myCircles[i][j - 1], ClockFace.clock_1);
+					if(i > 0 && i < myCells.length - 2) {
+					// cells in this row are 3s and 9s to a row of circles
+						if(j < myCells[i].length - 4) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 1) + ", " + (j / 2) + "], clock 9");
+							assignCell(myCells[i][j], myCircles[i / 2 - 1][j / 2], ClockFace.clock_9);
+						}
+						if(j > 2) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 1) + ", " + (j / 2 - 2) + "], clock 3");
+							assignCell(myCells[i][j], myCircles[i / 2 - 1][j / 2 - 2], ClockFace.clock_3);
+						}				
 					}
-				// cell is in bottom half of grid or center row
+					if(i > 2) {
+					// cells in this row are 5s and 7s to a row of circles
+						// cell is in top half of grid or center row
+						if(i <= centerCellRowIndex) {
+							if(j > 0 && j < myCells[i].length - 4) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 2) + ", " + (j / 2 - 1) + "], clock 7");
+								assignCell(myCells[i][j], myCircles[i / 2 - 2][j / 2 - 1], ClockFace.clock_7);
+							}
+							if(j > 2 && j < myCells[i].length - 2) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 2) + ", " + (j / 2 - 2) + "], clock 5");
+								assignCell(myCells[i][j], myCircles[i / 2 - 2][j / 2 - 2], ClockFace.clock_5);
+							}
+						} else {
+						// cell is in bottom half of grid					
+							if(j < myCells[i].length - 2) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 2) + ", " + (j / 2) + "], clock 7");
+								assignCell(myCells[i][j], myCircles[i / 2 - 2][j / 2], ClockFace.clock_7);
+							}
+							if(j > 0) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 2) + ", " + (j / 2 - 1) + "], clock 5");
+								assignCell(myCells[i][j], myCircles[i / 2 - 2][j / 2 - 1], ClockFace.clock_5);
+							}
+						}
+					}
 				} else {
-					if(j > 0 && j < myCells[i].length - 2) {
-						// cell is 11 to myCircles[i, j-1]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + i + ", " + (j - 1) + "], clock 11");
-						assignCell(myCells[i][j], myCircles[i][j - 1], ClockFace.clock_11);
+				// odd-indexed cells in even indexed rows occupy clock positions 6 and 12 (petals)
+					/*
+						How should we handle (literal) edge cases with these? There are cells here that are not part of any (complete) circle.
+						Two possible approaches:
+							~ Have only complete circles, which means there will be "phantom" cells just inside the outermost hex of cells
+							~ Or, have incomplete circles where charms rotate directly across the "gap"
+								- going with this one for now
+					*/
+					if(i < myCells.length - 4) {
+					// cells in this row are 12s to a row of circles
+						if(i < centerCellRowIndex) {
+						// cell is in top half of grid
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2) + ", " + (Math.floor(j / 2)) + "], clock 12");
+							assignCell(myCells[i][j], myCircles[i / 2][Math.floor(j / 2)], ClockFace.clock_12);
+						} else {
+						// cell is in bottom half of grid or center row
+							if(j > 1 && j < myCells[i].length - 3) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2) + ", " + (Math.floor(j / 2) - 1) + "], clock 12");
+								assignCell(myCells[i][j], myCircles[i / 2][Math.floor(j / 2) - 1], ClockFace.clock_12);
+							}
+						}
 					}
-					if(j > 1 && j < myCells[i].length - 1) {
-						// cell is 1 to myCircles[i, j-2]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + i + ", " + (j - 2) + "], clock 1");
-						assignCell(myCells[i][j], myCircles[i][j - 2], ClockFace.clock_1);
-					}					
+					if(i > 2) {
+					// cells in this row are 6s to a row of circles
+						if(i <= centerCellRowIndex) {
+						// cell is in top half of grid or center row
+							if(j > 1 && j < myCells[i].length - 3) {
+								printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 2) + ", " + (Math.floor(j / 2) - 1) + "], clock 6");
+								assignCell(myCells[i][j], myCircles[i / 2 - 2][Math.floor(j / 2) - 1], ClockFace.clock_6);
+							}
+						} else {
+						// cell is in bottom half of grid
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i / 2 - 2) + ", " + (Math.floor(j / 2)) + "], clock 6");
+							assignCell(myCells[i][j], myCircles[i / 2 - 2][Math.floor(j / 2)], ClockFace.clock_6);
+						}						
+					}
 				}
 			}
-			// the cells in this row are 3s and 9s to a row of circles
-			if(i > 0 && i < myCells.length - 1) {
-				if(j < myCells[i].length - 2) {
-					// cell is 9 to myCircles[i-1, j]
-					// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i - 1) + ", " + j + "], clock 9");
-					assignCell(myCells[i][j], myCircles[i - 1][j], ClockFace.clock_9);
+		} else {
+		// cells in odd-indexed rows occupy clock positions 2, 4, 8, and 10 (petals)
+			for(j = 0; j < myCells[i].length; j++) {
+				if(i < myCells.length - 3) {
+				// cells in this row are 2s and 10s to a row of circles
+					if(i < centerCellRowIndex) {
+					// cell is in top half of grid
+						if(j % 2 == 0 && j < myCells[i].length - 3) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2)) + ", " + (j / 2) + "], clock 10");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2)][j / 2], ClockFace.clock_10);
+						} else if(j % 2 != 0 && j > 2) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2)) + ", " + (Math.floor(j / 2) - 1) + "], clock 2");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2)][Math.floor(j / 2) - 1], ClockFace.clock_2);
+						}
+					} else {
+					// cell is in bottom half of grid
+						if(j % 2 != 0 && j < myCells[i].length - 4) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2)) + ", " + (Math.floor(j / 2)) + "], clock 10");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2)][Math.floor(j / 2)], ClockFace.clock_10);
+						} else if(j % 2 == 0 && j > 3) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2)) + ", " + (j / 2 - 2) + "], clock 2");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2)][j / 2 - 2], ClockFace.clock_2);
+						}
+					}
 				}
-				if(j > 1) {
-					// cell is 3 to myCircles[i-1, j-2]
-					// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i - 1) + ", " + (j - 2) + "], clock 3");
-					assignCell(myCells[i][j], myCircles[i - 1][j - 2], ClockFace.clock_3);
-				}				
-			}
-			// the cells in this row are 5s and 7s to a row of circles
-			if(i > 1) {
-				// cell is in top half of grid or center row
-				if(i <= centerCellRowIndex) {
-					if(j > 0 && j < myCells[i].length - 2) {
-						// cell is 7 to myCircles[i-2, j-1]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i - 2) + ", " + (j - 1) + "], clock 7");
-						assignCell(myCells[i][j], myCircles[i - 2][j - 1], ClockFace.clock_7);
-					}
-					if(j > 1 && j < myCells[i].length - 1) {
-						// cell is 5 to myCircles[i-2, j-2]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i - 2) + ", " + (j - 2) + "], clock 5");
-						assignCell(myCells[i][j], myCircles[i - 2][j - 2], ClockFace.clock_5);
-					}
-				// cell is in bottom half of grid
-				} else {					
-					if(j < myCells[i].length - 1) {
-						// cell is 7 to myCircles[i-2, j]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i - 2) + ", " + j + "], clock 7");
-						assignCell(myCells[i][j], myCircles[i - 2][j], ClockFace.clock_7);
-					}
-					if(j > 0) {
-						// cell is 5 to myCircles[i-2, j-1]
-						// printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (i - 2) + ", " + (j - 1) + "], clock 5");
-						assignCell(myCells[i][j], myCircles[i - 2][j - 1], ClockFace.clock_5);
+				if(i > 1) {
+				// cells in this row are 4s and 8s to a row of circles
+					if(i < centerCellRowIndex) {
+					// cell is in top half of grid
+						//printMessage("got here: 4/8, cell in top half")
+						if(j % 2 != 0 && j < myCells[i].length - 4) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2) - 1) + ", " + (Math.floor(j / 2)) + "], clock 8");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2) - 1][Math.floor(j / 2)], ClockFace.clock_8);
+						} else if(j % 2 == 0 && j > 3) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2) - 1) + ", " + (j / 2 - 2) + "], clock 4");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2) - 1][j / 2 - 2], ClockFace.clock_4);
+						}
+					} else {
+					// cell is in bottom half of grid
+						//printMessage("got here: 4/8, cell in bottom half")
+						if(j % 2 == 0 && j < myCells[i].length - 3) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2) - 1) + ", " + (j / 2) + "], clock 8");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2) - 1][j / 2], ClockFace.clock_8);
+						} else if (j % 2 != 0 && j > 2) {
+							printMessage("assignCell(myCells[" + i + ", " + j + "], myCircles[" + (Math.floor(i / 2) - 1) + ", " + (Math.floor(j / 2) - 1) + "], clock 4");
+							assignCell(myCells[i][j], myCircles[Math.floor(i / 2) - 1][Math.floor(j / 2) - 1], ClockFace.clock_4);
+						}
 					}
 				}
 			}

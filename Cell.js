@@ -4,7 +4,7 @@ function Cell(rowNumber, rowPosition) {
 	this.coordinates = this.findCoordinates(rowNumber, rowPosition); // center of cell
 	this.currentContents;	// game tile currently occupying this cell
 	this.circles = [];		// circle at index [i] is the circle *that has this cell* at ClockFace i
-	this.drawn = false;
+	this.phantom = false;
 }
 
 Cell.prototype.findCoordinates = function(rowNumber, rowPosition) {
@@ -18,7 +18,7 @@ Cell.prototype.findCoordinates = function(rowNumber, rowPosition) {
 	y = rowNumber <= centerRowIndex ? transformY(leftmostCircleY, circleYIncrement / 2, rowOffset, Direction.up)
 		: transformY(leftmostCircleY, circleYIncrement / 2, rowOffset, Direction.down);
 		
-	printMessage("myCells[" + rowNumber + ", " + rowPosition + "]: x = " + x + "; y = " + y);
+	//printMessage("myCells[" + rowNumber + ", " + rowPosition + "]: x = " + x + "; y = " + y);
 	
 	return new Coordinates(x + canvasPadding, y + canvasPadding);
 };
@@ -32,11 +32,14 @@ Cell.prototype.y = function() {
 };
 
 Cell.prototype.draw = function() {
-	context = myGameArea.context;
-	context.lineWidth = cellLineWidth;
-	context.strokeStyle = cellLineColor;
-	context.beginPath();
-	context.arc(this.x(), this.y(), cellRadius, 0, convertToRadians(360), false); // x, y, circleRadius, start angle, end angle, boolean counterclockwise
-	context.stroke();
-	this.drawn = true;
+	if(this.circles.length == 0) {
+		this.phantom = true;
+	} else {
+		context = myGameArea.context;
+		context.lineWidth = cellLineWidth;
+		context.strokeStyle = cellLineColor;
+		context.beginPath();
+		context.arc(this.x(), this.y(), cellRadius, 0, convertToRadians(360), false); // x, y, circleRadius, start angle, end angle, boolean counterclockwise
+		context.stroke();
+	}
 };
